@@ -14,7 +14,7 @@ namespace ToDoList.Models
         public int ToDoStatusId { get; set; }
         [Required]
         public ToDoStatus ToDoStatus { get; set; }
-        public int ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; }
         [Required]
         public ApplicationUser ApplicationUser { get; set; }
     }
