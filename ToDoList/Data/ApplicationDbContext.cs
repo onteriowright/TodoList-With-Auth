@@ -10,13 +10,10 @@ namespace ToDoList.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
-        public DbSet<ToDoItem> TodoItems { get; set; }
+        public DbSet<ToDoItem> ToDoItem { get; set; }
         public DbSet<ToDoStatus> ToDoStatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
