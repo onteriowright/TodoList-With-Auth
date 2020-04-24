@@ -129,6 +129,9 @@ namespace ToDoList.Controllers
             var allStatuses = await _context.ToDoStatus
               .ToListAsync();
 
+            var toDoItem = await _context.ToDoItem.FirstOrDefaultAsync(ti => ti.Id == id);
+            var user = await GetCurrentUserAsync();
+
             var todoItem = _context.ToDoItem
                 .FirstOrDefault(ti => ti.Id == id);
 
@@ -143,6 +146,12 @@ namespace ToDoList.Controllers
                     Value = td.Id.ToString()
                 }).ToList()
             };
+
+            if (toDoItem.ApplicationUserId != user.Id)
+            {
+                return NotFound();
+            }
+
             return View(viewModel);
         }
 
@@ -162,11 +171,6 @@ namespace ToDoList.Controllers
                     ToDoStatusId = item.ToDoStatusId,
                     ApplicationUserId = user.Id
                 };
-
-                if (item.ApplicationUserId != user.Id)
-                {
-                    return NotFound();
-                }
 
                 _context.ToDoItem.Update(todoItem);
                 await _context.SaveChangesAsync();
