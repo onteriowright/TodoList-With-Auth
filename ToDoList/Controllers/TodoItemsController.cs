@@ -129,13 +129,15 @@ namespace ToDoList.Controllers
             var allStatuses = await _context.ToDoStatus
               .ToListAsync();
 
-            var todoItem = _context.ToDoItem.FirstOrDefault(ti => ti.Id == id);
+            var todoItem = _context.ToDoItem
+                .FirstOrDefault(ti => ti.Id == id);
 
             var viewModel = new ToDoStatusViewModel()
             {
                 Title = todoItem.Title,
                 ToDoStatusId = todoItem.ToDoStatusId,
-                ToDoStatusOptions = allStatuses.Select(td => new SelectListItem()
+                ToDoStatusOptions = allStatuses
+                .Select(td => new SelectListItem()
                 {
                     Text = td.Title,
                     Value = td.Id.ToString()
@@ -161,13 +163,18 @@ namespace ToDoList.Controllers
                     ApplicationUserId = user.Id
                 };
 
+                if (item.ApplicationUserId != user.Id)
+                {
+                    return NotFound();
+                }
+
                 _context.ToDoItem.Update(todoItem);
                 await _context.SaveChangesAsync();
 
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
@@ -176,7 +183,9 @@ namespace ToDoList.Controllers
         // GET: TodoItems/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var todoItem = await _context.ToDoItem.Include(ti => ti.ToDoStatus).FirstOrDefaultAsync(ti => ti.Id == id);
+            var todoItem = await _context.ToDoItem
+                .Include(ti => ti.ToDoStatus)
+                .FirstOrDefaultAsync(ti => ti.Id == id);
 
             return View(todoItem);
         }
@@ -193,7 +202,7 @@ namespace ToDoList.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
